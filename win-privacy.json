@@ -169,6 +169,14 @@
       ]
     },
     {
+      "id": "PowerShell",
+      "title": "PowerShell 7: телеметрия и проверка обновлений",
+      "items": [
+        { "hive": "HKLM", "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", "name": "POWERSHELL_TELEMETRY_OPTOUT", "value": "1", "kind": "String", "note": "переменная среды: не отправлять статистику запусков PowerShell 7" },
+        { "hive": "HKLM", "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", "name": "POWERSHELL_UPDATECHECK", "value": "Off", "kind": "String", "note": "переменная среды: не проверять обновления PowerShell 7 при запуске" }
+      ]
+    },
+    {
       "id": "Misc",
       "title": "Прочее",
       "items": [

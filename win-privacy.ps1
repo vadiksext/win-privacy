@@ -178,15 +178,17 @@ foreach ($g in $cfg.groups) {
         $total++
         $label = "$($it.hive)\$($it.path)\$($it.name)"
         $st = Get-State $it.hive $it.path $it.name
-        # "accept" in the json lists other values that are fine as they are (e.g. AllowTelemetry 0).
-        if ($st.exists -and $st.kind -eq 'DWord' -and (@($it.value) + @($it.accept) -contains [int]$st.value)) {
+        # "kind" in the json is the registry type (DWord unless stated, String for environment variables);
+        # "accept" lists other values that are fine as they are (e.g. AllowTelemetry 0).
+        $kind = if ($it.kind) { $it.kind } else { 'DWord' }
+        if ($st.exists -and $st.kind -eq $kind -and (@($it.value) + @($it.accept) -contains $st.value)) {
             $same++
             Say ($M.st_ok -f $label, $st.value, $it.note) 'DarkGreen'
         } elseif ($mode -eq 'check') {
             Say ($M.st_diff -f $label, (Show-Value $st), $it.value, $it.note) 'Yellow'
         } else {
             try {
-                Set-Value $it.hive $it.path $it.name $it.value 'DWord'
+                Set-Value $it.hive $it.path $it.name $it.value $kind
                 [void]$saved.Add([ordered]@{ hive = $it.hive; path = $it.path; name = $it.name
                         existed = [bool]$st.exists; value = $st.value; kind = $st.kind })
                 $changed++
