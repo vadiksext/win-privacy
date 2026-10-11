@@ -1,0 +1,180 @@
+{
+  "messages": {
+    "title": "win-privacy: настройки конфиденциальности Windows штатными политиками",
+    "mode_check": "Режим: ПРОВЕРКА (ничего не меняется)",
+    "mode_apply": "Режим: ПРИМЕНЕНИЕ",
+    "mode_undo": "Режим: ОТКАТ",
+    "who": "Компьютер: {0}. Пользователь: {1}. Редакция Windows: {2}. Права администратора: {3}.",
+    "yes": "да",
+    "no": "нет",
+    "hkcu_note": "Параметры пользователя (HKCU) относятся только к пользователю {0}. Для другого пользователя скрипт нужно запустить под ним.",
+    "pro_note": "Эта редакция Windows не умеет выключать диагностические данные полностью: минимум - «обязательные». Полное отключение работает только в Enterprise и Education.",
+    "need_admin": "Нужны права администратора - сейчас появится запрос UAC, работа продолжится в новом окне.",
+    "uac_declined": "Запрос UAC отклонён или не удался: {0}",
+    "elevated_started": "Запущено в новом окне. Итог смотрите там и в папке журналов: {0}",
+    "skip_unknown": "Неизвестная группа в -Skip: {0}. Допустимые группы: {1}",
+    "group": "== {0} [{1}]",
+    "group_skipped": "== {0} [{1}] - пропущено по -Skip",
+    "st_ok": "[ OK ] {0} = {1} - {2}",
+    "st_diff": "[ -- ] {0}: сейчас {1}, нужно {2} - {3}",
+    "st_set": "[ => ] {0}: было {1}, стало {2} - {3}",
+    "st_fail": "[ !! ] {0}: не удалось записать - {1}",
+    "st_restored": "[ <= ] {0}: возвращено {1}",
+    "st_removed": "[ <= ] {0}: значение удалено (до скрипта его не было)",
+    "not_set": "не задано",
+    "defender_effective": "Защитник сейчас на деле: участие в облачной защите (MAPS) = {0}, отправка образцов = {1} (0 - спрашивать, 1 - безопасные, 2 - никогда, 3 - все). При включённой «Защите от подделки» Защитник может игнорировать часть политик.",
+    "sum_check": "Итог проверки: совпадает {0} из {1}, отличается {2}.",
+    "sum_check_hint": "Чтобы применить: apply.cmd (или win-privacy.ps1 -Apply). Исключить группы: -Skip OneDrive,Location",
+    "sum_apply": "Итог: изменено {0}, уже было как нужно {1}, ошибок {2}.",
+    "backup_saved": "Прежние значения сохранены для отката: {0}",
+    "nothing_changed": "Менять было нечего - файл отката не создавался.",
+    "reboot": "Перезагрузите компьютер: часть политик начинает действовать только после перезагрузки.",
+    "undo_none": "Файлов отката для пользователя {0} на этом компьютере нет в папке {1}",
+    "undo_using": "Откат по файлу: {0} (создан {1})",
+    "undo_wrong": "Файл отката создан на другом компьютере или для другого пользователя ({0}\\{1}) - отказ.",
+    "sum_undo": "Итог отката: возвращено {0}, ошибок {1}. Файл отката помечен как использованный.",
+    "log_saved": "Журнал: {0}",
+    "log_failed": "Не удалось записать журнал в {0}: {1}",
+    "press_enter": "Нажмите Enter, чтобы закрыть окно"
+  },
+  "groups": [
+    {
+      "id": "Telemetry",
+      "title": "Диагностические данные и отчёты об ошибках",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "AllowTelemetry", "value": 1, "accept": [0], "note": "только обязательные диагностические данные" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "LimitDiagnosticLogCollection", "value": 1, "note": "не отправлять дополнительные журналы диагностики" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "LimitDumpCollection", "value": 1, "note": "не отправлять полные дампы памяти" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "AllowDeviceNameInTelemetry", "value": 0, "note": "не отправлять имя компьютера" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "DoNotShowFeedbackNotifications", "value": 1, "note": "не показывать запросы отзывов" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\Windows\\CloudContent", "name": "DisableTailoredExperiencesWithDiagnosticData", "value": 1, "note": "не использовать диагностические данные для «персонализированных возможностей»" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo", "name": "DisabledByGroupPolicy", "value": 1, "note": "отключить рекламный идентификатор" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat", "name": "AITEnable", "value": 0, "note": "отключить телеметрию приложений" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat", "name": "DisableInventory", "value": 1, "note": "не собирать опись установленных программ" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows", "name": "CEIPEnable", "value": 0, "note": "отключить программу улучшения качества" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting", "name": "Disabled", "value": 1, "note": "не отправлять отчёты об ошибках (в них попадает память программ с открытыми документами)" }
+      ]
+    },
+    {
+      "id": "Input",
+      "title": "Ввод, рукописный текст и речь",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\InputPersonalization", "name": "AllowInputPersonalization", "value": 0, "note": "отключить распознавание речи через интернет" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\InputPersonalization", "name": "RestrictImplicitInkCollection", "value": 1, "note": "не собирать образцы рукописного ввода" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\InputPersonalization", "name": "RestrictImplicitTextCollection", "value": 1, "note": "не собирать набранный текст" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\TextInput", "name": "AllowLinguisticDataCollection", "value": 0, "note": "не отправлять данные набора и рукописного ввода «для улучшения»" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC", "name": "PreventHandwritingDataSharing", "value": 1, "note": "не делиться данными рукописного ввода" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\HandwritingErrorReports", "name": "PreventHandwritingErrorReports", "value": 1, "note": "не отправлять отчёты об ошибках распознавания" }
+      ]
+    },
+    {
+      "id": "Activity",
+      "title": "Журнал действий и облачный буфер обмена",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System", "name": "EnableActivityFeed", "value": 0, "note": "отключить журнал действий" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System", "name": "PublishUserActivities", "value": 0, "note": "не записывать действия пользователя" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System", "name": "UploadUserActivities", "value": 0, "note": "не отправлять действия пользователя в Microsoft" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System", "name": "AllowCrossDeviceClipboard", "value": 0, "note": "не синхронизировать буфер обмена между устройствами через облако" }
+      ]
+    },
+    {
+      "id": "AI",
+      "title": "Recall и Copilot",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI", "name": "DisableAIDataAnalysis", "value": 1, "note": "Recall: не сохранять снимки экрана" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI", "name": "AllowRecallEnablement", "value": 0, "note": "Recall: запретить включение" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI", "name": "DisableClickToDo", "value": 1, "note": "отключить Click to Do (разбор содержимого экрана)" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\Windows\\WindowsCopilot", "name": "TurnOffWindowsCopilot", "value": 1, "note": "отключить встроенный Copilot (на отдельное приложение Copilot из Магазина не действует - его удалять вручную)" }
+      ]
+    },
+    {
+      "id": "Search",
+      "title": "Поиск в меню «Пуск»",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "name": "AllowCortana", "value": 0, "note": "отключить Cortana" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "name": "DisableWebSearch", "value": 1, "note": "не искать в интернете" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "name": "ConnectedSearchUseWeb", "value": 0, "note": "не показывать результаты из интернета" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "name": "AllowCloudSearch", "value": 0, "note": "не искать в облачных учётных записях" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "name": "EnableDynamicContentInWSB", "value": 0, "note": "отключить «главное в поиске»" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\Windows\\Explorer", "name": "DisableSearchBoxSuggestions", "value": 1, "note": "не отправлять набираемый в поиске текст в Bing" }
+      ]
+    },
+    {
+      "id": "Sync",
+      "title": "Синхронизация с учётной записью Microsoft и телефоном",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync", "name": "DisableSettingSync", "value": 2, "note": "отключить синхронизацию параметров Windows" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync", "name": "DisableSettingSyncUserOverride", "value": 1, "note": "не давать пользователю включить её обратно" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Messaging", "name": "AllowMessageSync", "value": 0, "note": "не синхронизировать сообщения" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\System", "name": "EnableMmx", "value": 0, "note": "отключить связь с телефоном (Phone Link)" }
+      ]
+    },
+    {
+      "id": "OneDrive",
+      "title": "OneDrive",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\OneDrive", "name": "DisableFileSyncNGSC", "value": 1, "note": "запретить OneDrive для хранения файлов" }
+      ]
+    },
+    {
+      "id": "Location",
+      "title": "Местоположение",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors", "name": "DisableLocation", "value": 1, "note": "отключить определение местоположения" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\FindMyDevice", "name": "AllowFindMyDevice", "value": 0, "note": "отключить «Поиск устройства»" }
+      ]
+    },
+    {
+      "id": "Defender",
+      "title": "Защитник: отправка файлов в облако",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", "name": "SubmitSamplesConsent", "value": 2, "note": "никогда не отправлять образцы файлов" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", "name": "SpynetReporting", "value": 0, "note": "не участвовать в облачной защите MAPS (сведения о найденных файлах уходят в Microsoft; без неё новые угрозы распознаются позже)" }
+      ]
+    },
+    {
+      "id": "Edge",
+      "title": "Microsoft Edge",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "DiagnosticData", "value": 0, "note": "не отправлять диагностические данные" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "PersonalizationReportingEnabled", "value": 0, "note": "не отправлять историю просмотров для персонализации рекламы" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "UserFeedbackAllowed", "value": 0, "note": "отключить отправку отзывов" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "BrowserSignin", "value": 0, "note": "запретить вход в браузер с учётной записью" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "SyncDisabled", "value": 1, "note": "отключить синхронизацию (закладки, пароли, история)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "SearchSuggestEnabled", "value": 0, "note": "не отправлять набираемый в адресной строке текст поисковику" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ResolveNavigationErrorsUseWebService", "value": 0, "note": "не обращаться к веб-службе при ошибках навигации" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "AlternateErrorPagesEnabled", "value": 0, "note": "не подсказывать похожие страницы при ошибке" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "NetworkPredictionOptions", "value": 2, "note": "не загружать страницы заранее" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "MicrosoftEditorProofingEnabled", "value": 0, "note": "проверка правописания без отправки текста в облако" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "TranslateEnabled", "value": 0, "note": "отключить перевод страниц (текст уходит в Microsoft)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "HubsSidebarEnabled", "value": 0, "note": "отключить боковую панель (в ней Copilot)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "EdgeShoppingAssistantEnabled", "value": 0, "note": "отключить помощника по покупкам" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ShowRecommendationsEnabled", "value": 0, "note": "отключить рекомендации" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "SpotlightExperiencesAndRecommendationsEnabled", "value": 0, "note": "отключить подборки и рекомендации Microsoft" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ShowMicrosoftRewards", "value": 0, "note": "отключить Microsoft Rewards" }
+      ]
+    },
+    {
+      "id": "Office",
+      "title": "Microsoft Office: сетевые функции и телеметрия",
+      "items": [
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common\\privacy", "name": "disconnectedstate", "value": 2, "note": "отключить сетевые функции Office целиком" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common\\privacy", "name": "usercontentdisabled", "value": 2, "note": "отключить функции, которые анализируют содержимое документов (переводчик, редактор, диктовка)" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common\\privacy", "name": "downloadcontentdisabled", "value": 2, "note": "отключить функции, которые загружают содержимое из интернета" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common\\privacy", "name": "controllerconnectedservicesenabled", "value": 2, "note": "отключить необязательные сетевые функции" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\common\\clienttelemetry", "name": "sendtelemetry", "value": 3, "note": "не отправлять диагностические данные Office" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common", "name": "sendcustomerdata", "value": 0, "note": "не отправлять личные сведения" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common", "name": "qmenable", "value": 0, "note": "отключить программу улучшения качества" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\office\\16.0\\common\\feedback", "name": "enabled", "value": 0, "note": "отключить отправку отзывов" }
+      ]
+    },
+    {
+      "id": "Misc",
+      "title": "Прочее",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization", "name": "DODownloadMode", "value": 0, "note": "обновления только с серверов Microsoft, без обмена с другими компьютерами" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "name": "AllowOnlineTips", "value": 0, "note": "не загружать подсказки в «Параметрах»" }
+      ]
+    }
+  ]
+}
