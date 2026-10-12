@@ -151,7 +151,9 @@
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "EdgeShoppingAssistantEnabled", "value": 0, "note": "отключить помощника по покупкам" },
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ShowRecommendationsEnabled", "value": 0, "note": "отключить рекомендации" },
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "SpotlightExperiencesAndRecommendationsEnabled", "value": 0, "note": "отключить подборки и рекомендации Microsoft" },
-        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ShowMicrosoftRewards", "value": 0, "note": "отключить Microsoft Rewards" }
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "ShowMicrosoftRewards", "value": 0, "note": "отключить Microsoft Rewards" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "StartupBoostEnabled", "value": 0, "note": "не запускать Edge в фоне при входе в Windows" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Edge", "name": "BackgroundModeEnabled", "value": 0, "note": "не оставлять Edge работать в фоне после закрытия окна" }
       ]
     },
     {
