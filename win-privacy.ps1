@@ -6,6 +6,8 @@
 #   win-privacy.ps1                     check: show current vs wanted, change nothing (no admin)
 #   win-privacy.ps1 -Apply              apply; previous values go to backup\ for -Undo
 #   win-privacy.ps1 -Apply -Skip OneDrive,Location     leave these groups alone
+#   win-privacy.ps1 -Apply -Include NameResolution     also apply an optional group ("optional"
+#                                       in the json): those are checked, but applied only when named
 #   win-privacy.ps1 -Undo               put back the values saved by the latest -Apply
 # -Apply and -Undo elevate themselves (UAC) and continue in a new window; every run writes
 # a log to logs\. HKCU values belong to the user who runs the script.
@@ -13,6 +15,7 @@ param(
     [switch]$Apply,
     [switch]$Undo,
     [string]$Skip = '',
+    [string]$Include = '',
     [string]$BackupFile = '',
     [switch]$Elevated
 )
@@ -56,6 +59,7 @@ if ($mode -ne 'check' -and -not $isAdmin) {
     if ($Apply) { $a += ' -Apply' }
     if ($Undo) { $a += ' -Undo' }
     if ($Skip) { $a += " -Skip `"$Skip`"" }
+    if ($Include) { $a += " -Include `"$Include`"" }
     if ($BackupFile) { $a += " -BackupFile `"$BackupFile`"" }
     try {
         Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -Verb RunAs -ArgumentList $a
@@ -165,15 +169,20 @@ if ($mode -eq 'undo') {
 # ---------------------------------------------------------------- check / apply
 $ids = @($cfg.groups | ForEach-Object { $_.id })
 $skipIds = @($Skip -split '[,; ]+' | Where-Object { $_ })
-foreach ($s in $skipIds) {
+$includeIds = @($Include -split '[,; ]+' | Where-Object { $_ })
+foreach ($s in $skipIds + $includeIds) {
     if ($ids -notcontains $s) { Say ($M.skip_unknown -f $s, ($ids -join ', ')) 'Red'; Finish 1 }
 }
 
-$total = 0; $same = 0; $changed = 0; $failed = 0
+$total = 0; $same = 0; $changed = 0; $failed = 0; $optDiff = 0
 $saved = New-Object System.Collections.ArrayList
 foreach ($g in $cfg.groups) {
     if ($skipIds -contains $g.id) { Say ($M.group_skipped -f $g.title, $g.id) 'DarkGray'; Say ''; continue }
-    Say ($M.group -f $g.title, $g.id) 'White'
+    # Optional groups are checked like the rest, but -Apply leaves them alone unless -Include names them.
+    if ($g.optional -and $mode -eq 'apply' -and $includeIds -notcontains $g.id) {
+        Say ($M.group_optional_skipped -f $g.title, $g.id) 'DarkGray'; Say ''; continue
+    }
+    Say ($(if ($g.optional -and $mode -eq 'check') { $M.group_optional } else { $M.group }) -f $g.title, $g.id) 'White'
     foreach ($it in $g.items) {
         $total++
         $label = "$($it.hive)\$($it.path)\$($it.name)"
@@ -185,6 +194,7 @@ foreach ($g in $cfg.groups) {
             $same++
             Say ($M.st_ok -f $label, $st.value, $it.note) 'DarkGreen'
         } elseif ($mode -eq 'check') {
+            if ($g.optional) { $optDiff++ }
             Say ($M.st_diff -f $label, (Show-Value $st), $it.value, $it.note) 'Yellow'
         } else {
             try {
@@ -207,7 +217,8 @@ foreach ($g in $cfg.groups) {
 
 if ($mode -eq 'check') {
     Say ($M.sum_check -f $same, $total, ($total - $same)) 'Cyan'
-    if ($total -ne $same) { Say $M.sum_check_hint }
+    if ($total - $same -gt $optDiff) { Say $M.sum_check_hint }
+    if ($optDiff) { Say ($M.sum_check_optional -f $optDiff) }
     Finish 0
 }
 

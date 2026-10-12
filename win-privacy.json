@@ -12,9 +12,11 @@
     "need_admin": "Нужны права администратора - сейчас появится запрос UAC, работа продолжится в новом окне.",
     "uac_declined": "Запрос UAC отклонён или не удался: {0}",
     "elevated_started": "Запущено в новом окне. Итог смотрите там и в папке журналов: {0}",
-    "skip_unknown": "Неизвестная группа в -Skip: {0}. Допустимые группы: {1}",
+    "skip_unknown": "Неизвестная группа в -Skip или -Include: {0}. Допустимые группы: {1}",
     "group": "== {0} [{1}]",
     "group_skipped": "== {0} [{1}] - пропущено по -Skip",
+    "group_optional": "== {0} [{1}] - по желанию: применяется только с -Include {1}",
+    "group_optional_skipped": "== {0} [{1}] - по желанию, не применяется (включить: -Include {1})",
     "st_ok": "[ OK ] {0} = {1} - {2}",
     "st_diff": "[ -- ] {0}: сейчас {1}, нужно {2} - {3}",
     "st_set": "[ => ] {0}: было {1}, стало {2} - {3}",
@@ -25,6 +27,7 @@
     "defender_effective": "Защитник сейчас на деле: участие в облачной защите (MAPS) = {0}, отправка образцов = {1} (0 - спрашивать, 1 - безопасные, 2 - никогда, 3 - все). При включённой «Защите от подделки» Защитник может игнорировать часть политик.",
     "sum_check": "Итог проверки: совпадает {0} из {1}, отличается {2}.",
     "sum_check_hint": "Чтобы применить: apply.cmd (или win-privacy.ps1 -Apply). Исключить группы: -Skip OneDrive,Location",
+    "sum_check_optional": "В группах по желанию отличается {0}. Они применяются, только если их назвать: apply.cmd -Include NameResolution,ChromeSync,FirefoxSync",
     "sum_apply": "Итог: изменено {0}, уже было как нужно {1}, ошибок {2}.",
     "backup_saved": "Прежние значения сохранены для отката: {0}",
     "nothing_changed": "Менять было нечего - файл отката не создавался.",
@@ -157,6 +160,46 @@
       ]
     },
     {
+      "id": "Chrome",
+      "title": "Google Chrome: телеметрия",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "MetricsReportingEnabled", "value": 0, "note": "не отправлять статистику использования и отчёты о сбоях (вне домена Chrome может не принять эту политику - см. README)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "UrlKeyedAnonymizedDataCollectionEnabled", "value": 0, "note": "не отправлять адреса посещённых страниц («улучшение поиска и просмотра»)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "SafeBrowsingExtendedReportingEnabled", "value": 0, "note": "не отправлять расширенные отчёты Безопасного просмотра (сама защита остаётся)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "DomainReliabilityAllowed", "value": 0, "note": "не отправлять отчёты о доступности сайтов Google" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "UserFeedbackAllowed", "value": 0, "note": "отключить отправку отзывов" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "FeedbackSurveysEnabled", "value": 0, "note": "не показывать опросы Google" }
+      ]
+    },
+    {
+      "id": "Firefox",
+      "title": "Mozilla Firefox: телеметрия",
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox", "name": "DisableTelemetry", "value": 1, "note": "не отправлять данные об использовании" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox", "name": "DisableFirefoxStudies", "value": 1, "note": "не участвовать в исследованиях (Studies)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox", "name": "DisableDefaultBrowserAgent", "value": 1, "note": "отключить фоновое задание, которое сообщает Mozilla, какой браузер выбран по умолчанию" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox", "name": "DisableFeedbackCommands", "value": 1, "note": "отключить отправку отзывов" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox\\FirefoxSuggest", "name": "ImproveSuggest", "value": 0, "note": "не отправлять набираемый в адресной строке текст для «улучшения подсказок»" }
+      ]
+    },
+    {
+      "id": "ChromeSync",
+      "title": "Google Chrome: вход в учётную запись и синхронизация",
+      "optional": true,
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "BrowserSignin", "value": 0, "note": "запретить вход в Chrome с учётной записью Google" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "SyncDisabled", "value": 1, "note": "отключить синхронизацию Chrome (закладки, пароли, история)" }
+      ]
+    },
+    {
+      "id": "FirefoxSync",
+      "title": "Mozilla Firefox: вход в учётную запись и синхронизация",
+      "optional": true,
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Mozilla\\Firefox", "name": "DisableFirefoxAccounts", "value": 1, "note": "отключить учётную запись Mozilla и синхронизацию Firefox" }
+      ]
+    },
+    {
       "id": "Office",
       "title": "Microsoft Office: сетевые функции и телеметрия",
       "items": [
@@ -176,6 +219,16 @@
       "items": [
         { "hive": "HKLM", "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", "name": "POWERSHELL_TELEMETRY_OPTOUT", "value": "1", "kind": "String", "note": "переменная среды: не отправлять статистику запусков PowerShell 7" },
         { "hive": "HKLM", "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", "name": "POWERSHELL_UPDATECHECK", "value": "Off", "kind": "String", "note": "переменная среды: не проверять обновления PowerShell 7 при запуске" }
+      ]
+    },
+    {
+      "id": "NameResolution",
+      "title": "Поиск имён в локальной сети: LLMNR, mDNS, NetBIOS",
+      "optional": true,
+      "items": [
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient", "name": "EnableMulticast", "value": 0, "note": "отключить LLMNR (широковещательный поиск коротких имён)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient", "name": "EnableMDNS", "value": 0, "note": "отключить mDNS (имена вида имя.local перестанут находиться)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient", "name": "EnableNetbios", "value": 0, "note": "отключить поиск имён через NetBIOS" }
       ]
     },
     {
