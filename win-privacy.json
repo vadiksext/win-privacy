@@ -183,7 +183,8 @@
       "title": "Прочее",
       "items": [
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization", "name": "DODownloadMode", "value": 0, "note": "обновления только с серверов Microsoft, без обмена с другими компьютерами" },
-        { "hive": "HKLM", "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "name": "AllowOnlineTips", "value": 0, "note": "не загружать подсказки в «Параметрах»" }
+        { "hive": "HKLM", "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "name": "AllowOnlineTips", "value": 0, "note": "не загружать подсказки в «Параметрах»" },
+        { "hive": "HKCU", "path": "Software\\Policies\\Microsoft\\Windows\\Explorer", "name": "DisableThumbsDBOnNetworkFolders", "value": 1, "note": "не оставлять Thumbs.db с миниатюрами в сетевых папках и на подключённых дисках" }
       ]
     }
   ]
