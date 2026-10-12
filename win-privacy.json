@@ -163,7 +163,8 @@
       "id": "Chrome",
       "title": "Google Chrome: телеметрия",
       "items": [
-        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "MetricsReportingEnabled", "value": 0, "note": "не отправлять статистику использования и отчёты о сбоях (вне домена Chrome может не принять эту политику - см. README)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "MetricsReportingEnabled", "value": 0, "note": "не отправлять статистику использования и отчёты о сбоях (политика действует только на компьютере в домене, вне домена Chrome её игнорирует)" },
+        { "hive": "HKLM", "path": "SOFTWARE\\WOW6432Node\\Google\\Update\\ClientStateMedium\\{8A69D345-D564-463C-AFF1-A69D9E530F96}", "name": "usagestats", "value": 0, "note": "согласие на отправку статистики и отчётов о сбоях снято (тот же флажок, что в установщике и в настройках Chrome; не политика - в настройках его можно вернуть)" },
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "UrlKeyedAnonymizedDataCollectionEnabled", "value": 0, "note": "не отправлять адреса посещённых страниц («улучшение поиска и просмотра»)" },
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "SafeBrowsingExtendedReportingEnabled", "value": 0, "note": "не отправлять расширенные отчёты Безопасного просмотра (сама защита остаётся)" },
         { "hive": "HKLM", "path": "SOFTWARE\\Policies\\Google\\Chrome", "name": "DomainReliabilityAllowed", "value": 0, "note": "не отправлять отчёты о доступности сайтов Google" },
